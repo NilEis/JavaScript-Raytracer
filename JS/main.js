@@ -16,7 +16,7 @@ const POINT = new vector2D(5, 0);
 
 const PLANE = new vector2D(4, 0);
 
-const FPS = 60;
+const FPS = 0;
 
 //const webW = new Worker("JS/engine.js");
 
@@ -33,8 +33,11 @@ var tickIntervall;
  */
 function init() {
     c.cls();
-    tickIntervall = setInterval(tick, 1000 / FPS);
-    
+    if (FPS == 0)
+        tick();
+    else
+        tickIntervall = setInterval(tick, 1000 / FPS);
+
 }
 
 
@@ -46,7 +49,7 @@ function tick() {
     const dToP = vector2D.sub(POINT, PLANE).mag;
     //webW.postMessage(["Welt einfügen", POINT, dToP, -1, -1, 1, 1, WIDTH, HEIGHT]);
     const img = render("Welt einfügen", POINT, dToP, -1, -1, 1, 1, WIDTH, HEIGHT);
-    c.render(img, WIDTH, 0, 0, WIDTH, HEIGHT,1,1);
+    c.render(img, WIDTH, 0, 0, WIDTH, HEIGHT, 1, 1);
 }
 
 /*webW.addEventListener('message', function(e) {
