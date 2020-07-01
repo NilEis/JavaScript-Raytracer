@@ -1,29 +1,20 @@
 {
-  "name": "javascript_raycasting",
-  "version": "1.0.0",
-  "description": "A JS raycasting engine",
-  "main": "index.html",
-  "directories": {
-    "doc": "docs"
-  },
+  "name": "javascript-raytracer",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
   "dependencies": {
-    "better-docs": "^1.4.7",
-    "jsdoc": "^3.6.4"
-  },
-  "devDependencies": {
+    "jsdoc": "^3.6.4",
     "jsdoc-to-markdown": "^6.0.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NilEis/JavaScript_Raycasting.git"
-  },
-"scripts": {
-    "docs": "jsdoc2md JS/main.js > md/main.md"
+    "url": "git+https://github.com/NilEis/JavaScript-Raytracer.git"
   },
   "author": "Nils Eisenach",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/NilEis/JavaScript_Raycasting/issues"
+    "url": "https://github.com/NilEis/JavaScript-Raytracer/issues"
   },
-  "homepage": "https://github.com/NilEis/JavaScript_Raycasting#readme"
+  "homepage": "https://github.com/NilEis/JavaScript-Raytracer#readme"
 }
