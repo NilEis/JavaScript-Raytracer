@@ -33,8 +33,6 @@ var mouseDown = 0;
 document.body.onmousedown = function () {
     pMX = mouseX;
     pMY = mouseY;
-    _emitter.pos.x = mouseX;
-    _emitter.pos.y = mouseY;
     mouseDown = 1;
 }
 document.body.onmouseup = function () {
