@@ -77,7 +77,7 @@ class canvasClass {
     get shapeList() {
         return this.listSh;
     }
-    
+
     get rows() {
         return this._rows;
     }
@@ -241,7 +241,7 @@ class canvasClass {
     }
 
     /**
-     * Zeichnet die Zellen eines 2D Arrays auf das canvas
+     * Zeichnet die Zellen eines 1D Arrays auf das canvas
      * @param {number[]} arr Das 1D Array
      * @param {string[]} colorArray Die Zahlen in den Zellen des 2D Arrays geben den Index für die Zellen mit der entsprechenden Farbe an
      * @param {number} [w = Math.floor(canvas.width / arr[0].length)] Die Breite jeder Zelle
@@ -253,7 +253,23 @@ class canvasClass {
         let abstand = 0;
         for (let y = 0; y < sizeY; y++) {
             for (let x = 0; x < sizeX; x++) {
-                this.fillRect(x * w + abstand + xOffset, y * h + abstand + yOffset, w - abstand, h - abstand, colorArray[arr[y * breite + x]],true);
+                this.fillRect(x * w + abstand + xOffset, y * h + abstand + yOffset, w - abstand, h - abstand, colorArray[arr[y * breite + x]], true);
+            }
+        }
+    }
+
+    /**
+     * Zeichnet die Zellen eines 1D Arrays auf das canvas
+     * @param {number[]} arr Das 1D Array
+     * @param {number} w Die Breite jeder Zelle
+     * @param {number} h Die Höhe jeder Zelle
+     * @param {number} x_ Offset in x-Richtung
+     * @param {number} y Offset in y-Richtung
+     */
+    render(arr, breite, x_, y_, sizeX, sizeY, w, h) {
+        for (let y = 0; y < sizeY; y++) {
+            for (let x = 0; x < sizeX; x++) {
+                this.fillRect(x * w + x_, y * h + y_, w, h, arr[y * breite + x]);
             }
         }
     }
