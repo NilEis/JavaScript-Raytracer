@@ -20,7 +20,7 @@ const FPS = 0;
 
 var scene = {
     spheres: [],
-    BACKGROUND_COLOR = [200, 200, 200]
+    BACKGROUND_COLOR: [200, 200, 200]
 };
 
 //const webW = new Worker("JS/engine.js");
