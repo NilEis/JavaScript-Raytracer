@@ -16,9 +16,15 @@ function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height) {
             const vx = mapValue(x, 0, width, -1, 1);
             const vy = mapValue(y, 0, height, 1, -1);
             const ray = new vector3D(vx,vy,1);
+            ray.normalize();
             const clr = normalToRGB(ray);
             retArr.push(clr);
         }
     }
     return retArr;
+}
+
+
+function traceRay(){
+
 }
