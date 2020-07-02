@@ -25,6 +25,6 @@ function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height) {
 }
 
 
-function traceRay(){
+function traceRay(world,origin,direction, clipMin, clipMax){
 
 }
