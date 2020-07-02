@@ -9,15 +9,24 @@
  * @param {number} ey Der Endpunkt des Rechtecks
  * @return {color[]} Die Farbwerte für jeden Pixel
  */
-function render(world, point, distanceToPlane, sx, sy, ex, ey, w, h) {
+function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height) {
     let retArr = [];
-    for (let y = 0; y < h; y++) {
-        for (let x = 0; x < w; x++) {
-            const vx = x * ((ex - sx) / w);
-            const vy = y * ((ey - sy) / h);
-            const ray = new vector3D.sub(new vector3D(vx, vy, distanceToPlane), point);
-            retArr.push(random.getRandomColor());
+    for (let y = sy; y < ey; y++) {
+        for (let x = sx; x < ex; x++) {
+            const vx = mapValue(x, 0, width, -1, 1);
+            const vy = mapValue(y, 0, height, 1, -1);
+            const ray = new vector3D(vx,vy,1);
+            const clr = normalToRGB(ray);
+            retArr.push(clr);
         }
     }
     return retArr;
+}
+
+function normalToRGB(pV) {
+    pV.normalize();
+    const r = mapValue(pV.x, -1, 1, 0, 255);
+    const g = mapValue(pV.y, -1, 1, 0, 255);
+    const b = mapValue(pV.z, -1, 1, 0, 255);
+    return "rgb(" + r + ", " + g + ", " + b + ")";
 }
