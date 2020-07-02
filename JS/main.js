@@ -41,10 +41,10 @@ function init() {
         BACKGROUND_COLOR: [200, 200, 200]
     };
     //Add Spheres
-    scene.spheres.push(new sphere(0, 0,2, 1, [255, 0, 0], 500, 0.7));
+    scene.spheres.push(new sphere(0.5, 0,2, 1, [255, 0, 0], 500, 0.7));
     scene.spheres.push(new sphere(0, 0, -2, 1, [0, 255, 0], 500, 0.7));
-    /*scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.7));
-    scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));*/
+    scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.7));
+    scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));
     scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.1));
     //Add lights
     scene.lights.push(new light(AMBIENT, 0.2));
