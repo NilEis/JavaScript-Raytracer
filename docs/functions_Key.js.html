@@ -1,0 +1,186 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: functions/Key.js</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+    
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="array.module_js.html">array.js</a></li><li><a href="math.module_js.html">math.js</a></li><li><a href="module-Beispiel.html">Beispiel</a></li><li><a href="mouse.module_js.html">mouse.js</a></li></ul><h3>Classes</h3><ul><li><a href="canvasClass.html">canvasClass</a></li><li><a href="random.html">random</a></li><li><a href="vector2D.html">vector2D</a></li><li><a href="vector3D.html">vector3D</a></li></ul><h3>Global</h3><ul><li><a href="global.html#detectSwipe">detectSwipe</a></li><li><a href="global.html#key">key</a></li><li><a href="global.html#render">render</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>functions/Key.js</h1>
+                    </header>
+
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @var key Die Variabel, in welcher die letzte Richtungstaste gespeichert ist.
+ * @type {string}
+ */
+var key;
+
+
+document.onkeydown = function (event) {
+    if (event.keyCode === 37 || event.keyCode === 65) { // pacChar MOVE LEFT
+        key = "left";
+    } else if (event.keyCode === 38 || event.keyCode === 87) { // pacChar MOVE UP
+        key = "up";
+    } else if (event.keyCode === 39 || event.keyCode === 68) { // pacChar MOVE RIGHT
+        key = "right";
+    } else if (event.keyCode === 40 || event.keyCode === 83) { // pacChar MOVE DOWN
+        key = "down";
+    }
+    if (event.keyCode === 82)
+        init();
+}
+
+document.onkeyup = function(event){
+    key = "";
+}
+
+
+/**
+ * Die Methode erkennt Swipe-Bewegungen. Quelle: {@link https://stackoverflow.com/a/58719294}
+ * @param {string} id Die Id des Elements das für touch-events genutzt werden soll.
+ * @param {Function} func Die callback-Funktion
+ * @param {number} deltaMin Die minimale distanz bis die Funktion auslöst
+ */
+//detectSwipe('swipeme', (el, dir) => alert(`you swiped on element with id ${el.id} to ${dir} direction`));
+
+// source code
+
+// Tune deltaMin according to your needs. Near 0 it will almost
+// always trigger, with a big value it can never trigger.
+function detectSwipe(id, func, deltaMin = 90) {
+    const swipe_det = {
+        sX: 0,
+        sY: 0,
+        eX: 0,
+        eY: 0
+    }
+    // Directions enumeration
+    const directions = Object.freeze({
+        UP: 'up',
+        DOWN: 'down',
+        RIGHT: 'right',
+        LEFT: 'left'
+    })
+    let direction = null
+    const el = document.getElementById(id)
+    el.addEventListener('touchstart', function (e) {
+        const t = e.touches[0]
+        swipe_det.sX = t.screenX
+        swipe_det.sY = t.screenY
+    }, false)
+    el.addEventListener('touchmove', function (e) {
+        // Prevent default will stop user from scrolling, use with care
+        // e.preventDefault();
+        const t = e.touches[0]
+        swipe_det.eX = t.screenX
+        swipe_det.eY = t.screenY
+    }, false)
+    el.addEventListener('touchend', function (e) {
+        const deltaX = swipe_det.eX - swipe_det.sX
+        const deltaY = swipe_det.eY - swipe_det.sY
+        // Min swipe distance, you could use absolute value rather
+        // than square. It just felt better for personnal use
+        if (deltaX ** 2 + deltaY ** 2 &lt; deltaMin ** 2) return
+        // horizontal
+        if (deltaY === 0 || Math.abs(deltaX / deltaY) > 1)
+            direction = deltaX > 0 ? directions.RIGHT : directions.LEFT
+        else // vertical
+            direction = deltaY > 0 ? directions.UP : directions.DOWN
+
+        if (direction &amp;&amp; typeof func === 'function') func(el, direction)
+
+        direction = null
+    }, false)
+}
+
+function setKey(el, direction) {
+    //el ignoriere ich, da ich die Funktion eh nur für ein Element nutze
+    if (direction == "down" || direction == "up")
+        key = direction == "down" ? "up" : "down";
+    else
+        key = direction;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 14:51:06 GMT+0200 (Mitteleuropäische Sommerzeit)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
