@@ -9,7 +9,7 @@
  * @param {number} ey Der Endpunkt des Rechtecks
  * @return {color[]} Die Farbwerte für jeden Pixel
  */
-function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height, aspectX, aspectY) {
+async function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height, aspectX, aspectY, bounces) {
     let retArr = [];
     const i = 1;
     for (let y = sy; y < ey; y++) {
@@ -19,7 +19,7 @@ function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height, as
                 const vy = mapValue(y, 0, height, aspectY, -aspectY);
                 const ray = new vector3D(vx, vy, distanceToPlane);
                 ray.normalize();
-                const clr = colorToRGB(traceRay(world, point, ray, 1, Infinity));
+                const clr = colorToRGB(traceRay(world, point, ray, 1, Infinity, bounces));
                 //c.line(x,y,x+vx,y+vy,"white");
                 retArr.push(clr);
             } else
@@ -31,14 +31,22 @@ function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height, as
 }
 
 
-function traceRay(world, origin, direction, clipMin, clipMax) {
-    let { closest_sphere, closest_t } = closestIntersection(world, origin, direction, clipMax, clipMin);
-    if (closest_sphere == null)
+function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
+    const retV = closestIntersection(world, origin, direction, clipMax, clipMin);
+    if (!retV)
         return world.BACKGROUND_COLOR;
+    let closest_sphere = retV[0];
+    let closest_t = retV[1];
     let p = vector3D.add(origin, vector3D.mul(direction, closest_t));
     let normale = vector3D.sub(p, closest_sphere.pos);
     normale.normalize();
-    return mulRGB(closest_sphere.color, ComputeLighting(world,p.get(), normale.get(),vector3D.mul(direction,-1),closest_sphere.specular));
+    const r = closest_sphere.reflective;
+    const local_color = mulRGB(closest_sphere.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_sphere.specular));
+    if (rekAnker <= 0 || r <= 0)
+        return local_color;
+    const rRay = reflectRay(vector3D.mul(direction, -1), normale);
+    const reflected_color = traceRay(world, p, rRay, 0.001, Infinity, rekAnker - 1);
+    return addRGB(mulRGB(local_color, (1 - r)), mulRGB(reflected_color, r));
 }
 
 function closestIntersection(world, origin, direction, clipMax, clipMin) {
@@ -57,5 +65,12 @@ function closestIntersection(world, origin, direction, clipMax, clipMin) {
             closest_sphere = world.spheres[i];
         }
     }
-    return { closest_sphere, closest_t };
+    if (closest_sphere)
+        return [closest_sphere, closest_t];
+    else
+        return false;
+}
+
+function reflectRay(ray, normal) {
+    return vector3D.sub(vector3D.mul(normal, 2 * vector3D.scalarProduct(normal, ray)), ray);
 }

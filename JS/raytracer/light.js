@@ -22,24 +22,21 @@ function ComputeLighting(world, pos, norm, v, s) {
             } else {
                 l = world.lights[j].dir;
             }
+            l.normalize();
+            const retV = closestIntersection(world, pos, l, 0.001, Infinity);
+            if (retV)
+                continue;
+            shadow_sphere = retV[0];
+            shadow_t = retV[1];
+            let n_dot_l = vector3D.scalarProduct(norm, l);
+            if (n_dot_l > 0)
+                i += world.lights[j].intens * n_dot_l / (norm.mag * l.mag)
 
-            let {
-                shadow_sphere,
-                shadow_t
-            } = closestIntersection(world, pos, l, 0.001, 500);
-            if (shadow_sphere != null)
-                console.log("Schattig");
-            else {
-                let n_dot_l = vector3D.scalarProduct(norm, l);
-                if (n_dot_l > 0)
-                    i += world.lights[j].intens * n_dot_l / (norm.mag * l.mag)
-
-                if (s != -1) {
-                    let r = vector3D.sub(vector3D.mul(norm, 2 * vector3D.scalarProduct(norm, l)), l);
-                    let r_dot_v = vector3D.scalarProduct(r, v);
-                    if (r_dot_v > 0)
-                        i += world.lights[j].intens * Math.pow(r_dot_v / r.mag * v.mag, s);
-                }
+            if (s != -1) {
+                let r = vector3D.sub(vector3D.mul(norm, 2 * vector3D.scalarProduct(norm, l)), l);
+                let r_dot_v = vector3D.scalarProduct(r, v);
+                if (r_dot_v > 0)
+                    i += world.lights[j].intens * Math.pow(r_dot_v / r.mag * v.mag, s);
             }
         }
     }
