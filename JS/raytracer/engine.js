@@ -22,11 +22,3 @@ function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height) {
     }
     return retArr;
 }
-
-function normalToRGB(pV) {
-    pV.normalize();
-    const r = mapValue(pV.x, -1, 1, 0, 255);
-    const g = mapValue(pV.y, -1, 1, 0, 255);
-    const b = mapValue(pV.z, -1, 1, 0, 255);
-    return "rgb(" + r + ", " + g + ", " + b + ")";
-}
