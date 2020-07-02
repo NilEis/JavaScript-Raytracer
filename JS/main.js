@@ -12,7 +12,7 @@ const HEIGHT = 512;
  */
 const c = new canvasClass("canvasID", "canvas", WIDTH, HEIGHT, "black");
 
-const POINT = new vector3D(5, 0, 0);
+const POINT = new vector3D(0, 0, 0);
 
 const PLANE = new vector3D(4, 0, 0);
 
@@ -48,7 +48,8 @@ function tick() {
     c.cls();
     const dToP = vector3D.sub(POINT, PLANE).mag;
     //webW.postMessage(["Welt einfügen", POINT, dToP, 0, 0, 1, 1, WIDTH, HEIGHT]);
-    const img = render("Welt einfügen", POINT, dToP, 0, 0, 1, 1, WIDTH, HEIGHT);
+    const img = render("Welt einfügen", POINT, dToP, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
+    console.log((WIDTH*HEIGHT)+":"+img.length);
     c.render(img, WIDTH, 0, 0, WIDTH, HEIGHT, 1, 1);
 }
 
