@@ -9,3 +9,7 @@ function normalToRGB(pV) {
     const b = mapValue(pV.z, -1, 1, 0, 255);
     return "rgb(" + r + ", " + g + ", " + b + ")";
 }
+
+function mulRGB(rgb, v) {
+    return [clamp(rgb[0] * v, 0, 255), clamp(rgb[1] * v, 0, 255), clamp(rgb[2] * v, 0, 255)];
+}

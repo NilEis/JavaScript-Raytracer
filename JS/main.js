@@ -4,24 +4,21 @@
  */
 
 
-const WIDTH = 1024;
-const HEIGHT = 512;
+const WIDTH = 600;
+const HEIGHT = 600;
 
 /**
  * @constant {canvasClass} c Die canvasClass
  */
 const c = new canvasClass("canvasID", "canvas", WIDTH, HEIGHT, "black");
 
-const POINT = new vector3D(0, 0, 0);
+const POINT = new vector3D(0, -0.25, 0);
 
-const PLANE = new vector3D(4, 0, 0);
+const PLANE = new vector3D(2, -0.25, 0);
 
 const FPS = 0;
 
-var scene = {
-    spheres: [],
-    BACKGROUND_COLOR: [200, 200, 200]
-};
+var scene;
 
 //const webW = new Worker("JS/engine.js");
 
@@ -38,6 +35,20 @@ var tickIntervall;
  */
 function init() {
     c.cls();
+    scene = {
+        spheres: [],
+        lights: [],
+        BACKGROUND_COLOR: [200, 200, 200]
+    };
+    //Add Spheres
+    scene.spheres.push(new sphere(0, -1, 3, 1, [255, 0, 0], 500));
+    scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500));
+    scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500));
+    scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10));
+    //Add lights
+    scene.lights.push(new light(AMBIENT, 0.2));
+    scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
+    scene.lights.push(new light("directional", 0.2, null, new vector3D(1, 4, 4)));
     if (FPS == 0)
         tick();
     else
@@ -54,10 +65,10 @@ function tick() {
     const sx = 0,
         sy = 0,
         ex = WIDTH,
-        ey = HEIGHT + sy;
-    const dToP = vector3D.sub(POINT, PLANE).mag;
+        ey = HEIGHT;
+    const dToP = vector3D.sub(PLANE, POINT).mag;
     //webW.postMessage(["Welt einfügen", POINT, dToP, 0, 0, 1, 1, WIDTH, HEIGHT]);
-    const img = render(scene, POINT, dToP, sx, sy, ex, ey, WIDTH, HEIGHT);
+    const img = render(scene, POINT, dToP, sx, sy, ex, ey, WIDTH, HEIGHT, WIDTH / HEIGHT, 1);
     console.log((WIDTH * HEIGHT) + ":" + img.length);
     c.render(img, ex - sx, sx, sy, ex, ey, 1, 1);
 }
