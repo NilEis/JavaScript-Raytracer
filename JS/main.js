@@ -51,7 +51,7 @@ function init() {
     scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
     scene.lights.push(new light("directional", 0.2, null, new vector3D(1, 4, 4)));
     if (FPS == 0)
-        tick(0);
+        tick(1);
     else
         tickIntervall = setInterval(tick, 1000 / FPS, 1);
 
@@ -63,7 +63,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(2,2,bounces);
+    start(4,4,bounces);
     /*let sx = 0 * WIDTH / 4,
         sy = 0 * HEIGHT / 4,
         ex = WIDTH,
