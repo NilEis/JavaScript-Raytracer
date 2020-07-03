@@ -41,7 +41,7 @@ function init() {
         BACKGROUND_COLOR: [200, 200, 200]
     };
     //Add Spheres
-    scene.spheres.push(new sphere(0.5, 0,2, 1, [255, 0, 0], 500, 0.7));
+    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.7));
     scene.spheres.push(new sphere(0, 0, -2, 1, [0, 255, 0], 500, 0.7));
     scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.7));
     scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));
@@ -63,18 +63,29 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    const sx = 0,
-        sy = 0,
+    start(2,2,bounces);
+    /*let sx = 0 * WIDTH / 4,
+        sy = 0 * HEIGHT / 4,
         ex = WIDTH,
         ey = HEIGHT;
     const dToP = vector3D.sub(PLANE, POINT).mag;
     //webW.postMessage(["Welt einfügen", POINT, dToP, 0, 0, 1, 1, WIDTH, HEIGHT]);
     render(scene, POINT, dToP, sx, sy, ex, ey, WIDTH, HEIGHT, WIDTH / HEIGHT, 1, bounces).then((result) => {
-        c.render(result, ex - sx, sx, sy, ex, ey, 1, 1);
+        c.render(result, sx, sy, ex, ey, 1, 1);
         console.log((WIDTH * HEIGHT) + ":" + result.length);
     }).catch((err) => {
         alert(err);
-    });
+    });*/
+}
+
+
+function start(tileX, tileY, bounces) {
+    const tw = WIDTH / tileX;
+    const th = HEIGHT / tileY;
+    const dToP = vector3D.sub(PLANE, POINT).mag;
+    for (let y = 0; y < tileY; y++)
+    for (let x = 0; x < tileX; x++)
+        setTimeout(processTile,0,dToP, x, tw, y, th, bounces);
 }
 
 /*webW.addEventListener('message', function(e) {
@@ -82,3 +93,12 @@ function tick(bounces) {
   }, false);
 */
 init();
+
+function processTile(dToP, x, tw, y, th, bounces) {
+    render(scene, POINT, dToP, x * tw, y * th, x * tw + tw, y * th + th, WIDTH, HEIGHT, WIDTH / HEIGHT, 1, bounces).then((result) => {
+        c.render(result, x * tw, y * th, x * tw + tw, y * th + th, 1, 1);
+        console.log((WIDTH * HEIGHT) + ":" + result.length);
+    }).catch((err) => {
+        alert(err);
+    });
+}

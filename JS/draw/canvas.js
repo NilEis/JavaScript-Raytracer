@@ -266,10 +266,11 @@ class canvasClass {
      * @param {number} x_ Offset in x-Richtung
      * @param {number} y Offset in y-Richtung
      */
-    render(arr, breite, x_, y_, sizeX, sizeY, w, h) {
-        for (let y = y_; y < sizeY; y++) {
-            for (let x = x_; x < sizeX; x++) {
-                this.fillRect(x * w, y * h, w, h, arr[y * breite + x]);
+    render(arr, sx, sy, ex, ey, tw, th) {
+        const breite = ex - sx;
+        for (let y = sy; y < ey; y++) {
+            for (let x = sx; x < ex; x++) {
+                this.fillRect(x, y, tw, th, arr[(y-sy) * breite + (x-sx)]);
             }
         }
     }
