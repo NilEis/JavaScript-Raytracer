@@ -51,7 +51,7 @@ function init() {
     scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
     scene.lights.push(new light("directional", 0.2, null, new vector3D(1, 4, 4)));
     if (FPS == 0)
-        tick(1);
+        tick(0);
     else
         tickIntervall = setInterval(tick, 1000 / FPS, 1);
 
@@ -63,7 +63,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(1,1,bounces);
+    start(2,2,bounces);
     /*let sx = 0 * WIDTH / 4,
         sy = 0 * HEIGHT / 4,
         ex = WIDTH,
@@ -80,13 +80,12 @@ function tick(bounces) {
 
 
 function start(tileX, tileY, bounces) {
-    const worker = new Worker("JS/raytracer/webWorker.js");
     const tw = WIDTH / tileX;
     const th = HEIGHT / tileY;
     const dToP = vector3D.sub(PLANE, POINT).mag;
     for (let y = 0; y < tileY; y++)
     for (let x = 0; x < tileX; x++)
-        worker.postMessage([{x:dToP.x,y:dToP.y,z:dToP.z},{x:POINT.x,y:POINT.y,z:POINT.z} ,x, tw, y, th, bounces]);
+        setTimeout(processTile,0,dToP, x, tw, y, th, bounces);
 }
 
 /*webW.addEventListener('message', function(e) {
@@ -94,3 +93,12 @@ function start(tileX, tileY, bounces) {
   }, false);
 */
 init();
+
+function processTile(dToP, x, tw, y, th, bounces) {
+    render(scene, POINT, dToP, x * tw, y * th, x * tw + tw, y * th + th, WIDTH, HEIGHT, WIDTH / HEIGHT, 1, bounces).then((result) => {
+        c.render(result, x * tw, y * th, x * tw + tw, y * th + th, 1, 1);
+        console.log((WIDTH * HEIGHT) + ":" + result.length);
+    }).catch((err) => {
+        alert(err);
+    });
+}
