@@ -42,14 +42,16 @@ function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
     normale.normalize();
     const r = closest_sphere.reflective;
     const t = closest_sphere.transparency;
-    const local_color = mulRGB(mulRGB(closest_sphere.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_sphere.specular)), 1+closest_sphere.emission);
+    const local_color = mulRGB(mulRGB(closest_sphere.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_sphere.specular)), 1 + closest_sphere.emission);
     if (rekAnker <= 0 || (r <= 0 && t <= 0))
         return local_color;
     const rRay = reflectRay(vector3D.mul(direction, -1), normale);
     const reflected_color = r <= 0 ? [0, 0, 0] : traceRay(world, p, rRay, 0.001, Infinity, rekAnker - 1);
-    const tRay = reflectRay(vector3D.mul(direction, -1), normale);
-    const transparent_color = t <= 0 ? [0, 0, 0] : traceRay(world, p, tRay, 0.001, Infinity, rekAnker - 1);
     const blended_color = addRGB(mulRGB(local_color, (1 - r)), mulRGB(reflected_color, r));
+    const tRay = refractRay(vector3D.mul(direction, -1), normale,1,closest_sphere.IOR);
+    if (tRay)
+        return blended_color;
+    const transparent_color = t <= 0 ? [0, 0, 0] : traceRay(world, p, tRay, 0.001, Infinity, rekAnker - 1);
     return addRGB(mulRGB(blended_color, (1 - t)), mulRGB(transparent_color, t));
 }
 
@@ -77,4 +79,15 @@ function closestIntersection(world, origin, direction, clipMax, clipMin) {
 
 function reflectRay(ray, normal) {
     return vector3D.sub(vector3D.mul(normal, 2 * vector3D.scalarProduct(normal, ray)), ray);
+}
+
+function refractRay(ray, normal, n1, n2) {
+    const einfallsvektor = ray.get();
+    einfallsvektor.normalize();
+    const n = n1 / n2;
+    const cosI = -vector3D.scalarProduct(normal, ray);
+    const sinT2 = n * n * (1.0 - cosI * cosI);
+    if (sinT2 > 1.0) return false;
+    const cosT = Math.sqrt(1.0 - sinT2);
+    return vector3D.add(vector3D.mul(einfallsvektor, n), vector3D.mul(normal, (n * cosI - cosT)));
 }

@@ -4,8 +4,8 @@
  */
 
 
-const WIDTH = 1024;
-const HEIGHT = 512;
+const WIDTH = 600;
+const HEIGHT = 400;
 
 /**
  * @constant {canvasClass} c Die canvasClass
@@ -41,17 +41,17 @@ function init() {
         BACKGROUND_COLOR: [200, 200, 200]
     };
     //Add Spheres
-    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.7));
-    scene.spheres.push(new sphere(0, 0, -2, 1, [0, 255, 0], 500, 0.7));
-    scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.7));
+    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.2,0.2,1.3));
+    scene.spheres.push(new sphere(0, 0, -2, 1, [0, 255, 0], 500, 0.2));
+    scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.2));
     scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));
-    scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.1));
+    scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
     //Add lights
     scene.lights.push(new light(AMBIENT, 0.2));
     scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
     scene.lights.push(new light("directional", 0.2, null, new vector3D(1, 4, 4)));
     if (FPS == 0)
-        tick(0);
+        tick(1);
     else
         tickIntervall = setInterval(tick, 1000 / FPS, 1);
 
