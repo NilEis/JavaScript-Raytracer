@@ -1,10 +1,13 @@
 class sphere {
-    constructor(x, y, z, r, color, specular, reflective) {
+    constructor(x, y, z, r, color, specular=0.0, reflective=0.0, transparency=0.0, IndexOfRefrection=1.0, emission=0.0) {
         this.pos = new vector3D(x, y, z);
         this.r = r;
         this.color = color;
         this.specular = specular;
         this.reflective = reflective;
+        this.transparency = transparency;
+        this.IOR = IndexOfRefrection;
+        this.emission = emission;
     }
 }
 

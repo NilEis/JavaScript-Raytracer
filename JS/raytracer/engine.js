@@ -41,12 +41,16 @@ function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
     let normale = vector3D.sub(p, closest_sphere.pos);
     normale.normalize();
     const r = closest_sphere.reflective;
-    const local_color = mulRGB(closest_sphere.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_sphere.specular));
-    if (rekAnker <= 0 || r <= 0)
+    const t = closest_sphere.transparency;
+    const local_color = mulRGB(mulRGB(closest_sphere.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_sphere.specular)), 1+closest_sphere.emission);
+    if (rekAnker <= 0 || (r <= 0 && t <= 0))
         return local_color;
     const rRay = reflectRay(vector3D.mul(direction, -1), normale);
-    const reflected_color = traceRay(world, p, rRay, 0.001, Infinity, rekAnker - 1);
-    return addRGB(mulRGB(local_color, (1 - r)), mulRGB(reflected_color, r));
+    const reflected_color = r <= 0 ? [0, 0, 0] : traceRay(world, p, rRay, 0.001, Infinity, rekAnker - 1);
+    const tRay = reflectRay(vector3D.mul(direction, -1), normale);
+    const transparent_color = t <= 0 ? [0, 0, 0] : traceRay(world, p, tRay, 0.001, Infinity, rekAnker - 1);
+    const blended_color = addRGB(mulRGB(local_color, (1 - r)), mulRGB(reflected_color, r));
+    return addRGB(mulRGB(blended_color, (1 - t)), mulRGB(transparent_color, t));
 }
 
 function closestIntersection(world, origin, direction, clipMax, clipMin) {
