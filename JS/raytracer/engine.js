@@ -35,20 +35,20 @@ function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
     const retV = closestIntersection(world, origin, direction, clipMax, clipMin);
     if (!retV)
         return world.BACKGROUND_COLOR;
-    let closest_sphere = retV[0];
+    let closest_obj = retV[0];
     let closest_t = retV[1];
     let p = vector3D.add(origin, vector3D.mul(direction, closest_t));
-    let normale = vector3D.sub(p, closest_sphere.pos);
+    let normale = closest_obj.getNormale(p);
     normale.normalize();
-    const r = closest_sphere.reflective;
-    const t = closest_sphere.transparency;
-    const local_color = mulRGB(mulRGB(closest_sphere.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_sphere.specular)), 1 + closest_sphere.emission);
+    const r = closest_obj.reflective;
+    const t = closest_obj.transparency;
+    const local_color = mulRGB(mulRGB(closest_obj.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_obj.specular)), 1 + closest_obj.emission);
     if (rekAnker <= 0 || (r <= 0 && t <= 0))
         return local_color;
     const rRay = reflectRay(vector3D.mul(direction, -1), normale);
     const reflected_color = r <= 0 ? [0, 0, 0] : traceRay(world, p, rRay, 0.001, Infinity, rekAnker - 1);
     const blended_color = addRGB(mulRGB(local_color, (1 - r)), mulRGB(reflected_color, r));
-    const tRay = refractRay(vector3D.mul(direction, -1), normale,1,closest_sphere.IOR);
+    const tRay = refractRay(vector3D.mul(direction, -1), normale, 1, closest_obj.IOR);
     if (tRay)
         return blended_color;
     const transparent_color = t <= 0 ? [0, 0, 0] : traceRay(world, p, tRay, 0.001, Infinity, rekAnker - 1);
@@ -57,22 +57,22 @@ function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
 
 function closestIntersection(world, origin, direction, clipMax, clipMin) {
     let closest_t = Infinity;
-    let closest_sphere = null;
+    let closest_object = null;
     for (let i = 0; i < world.spheres.length; i++) {
         let t12 = IntersectRaySphere(origin, direction, world.spheres[i]);
         const t1 = t12[0];
         const t2 = t12[1];
         if (t1 < clipMax && t1 > clipMin && t1 < closest_t) {
             closest_t = t1;
-            closest_sphere = world.spheres[i];
+            closest_object = world.spheres[i];
         }
         if (t2 < clipMax && t2 > clipMin && t2 < closest_t) {
             closest_t = t2;
-            closest_sphere = world.spheres[i];
+            closest_object = world.spheres[i];
         }
     }
-    if (closest_sphere)
-        return [closest_sphere, closest_t];
+    if (closest_object)
+        return [closest_object, closest_t];
     else
         return false;
 }
