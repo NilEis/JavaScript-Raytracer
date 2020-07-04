@@ -37,15 +37,18 @@ function init() {
     c.cls();
     scene = {
         spheres: [],
+        planes: [],
         lights: [],
         BACKGROUND_COLOR: [200, 200, 200]
     };
     //Add Spheres
-    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.2,0.8,1.3));
+    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.8, 1.3));
     scene.spheres.push(new sphere(0, 0, -2, 1, [0, 255, 0], 500, 0.2));
     scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.2));
     scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));
     scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
+    //Add Planes
+    scene.planes.push(new plane(0,-1,0,0,1,0,[255,255,0]));
     //Add lights
     scene.lights.push(new light(AMBIENT, 0.2));
     scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
@@ -63,7 +66,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(2,2,bounces);
+    start(4, 4, bounces);
 }
 
 
@@ -72,8 +75,8 @@ function start(tileX, tileY, bounces) {
     const th = HEIGHT / tileY;
     const dToP = vector3D.sub(PLANE, POINT).mag;
     for (let y = 0; y < tileY; y++)
-    for (let x = 0; x < tileX; x++)
-        setTimeout(processTile,0,dToP, x, tw, y, th, bounces);
+        for (let x = 0; x < tileX; x++)
+            setTimeout(processTile, 0, dToP, x, tw, y, th, bounces);
 }
 
 /*webW.addEventListener('message', function(e) {
