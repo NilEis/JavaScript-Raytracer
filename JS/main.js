@@ -12,9 +12,9 @@ const HEIGHT = 500;
  */
 const c = new canvasClass("canvasID", "canvas", WIDTH, HEIGHT, "black");
 
-const POINT = new vector3D(0, -0.25, -2);
+const POINT = new vector3D(0, 0, -2);
 
-const PLANE = new vector3D(2.5, -0.25, 0);
+const PLANE = new vector3D(2.5, 0, -2);
 
 const FPS = 0;
 
@@ -38,6 +38,7 @@ function init() {
     scene = {
         spheres: [],
         planes: [],
+        disks: [],
         lights: [],
         BACKGROUND_COLOR: [200, 200, 200]
     };
@@ -48,7 +49,9 @@ function init() {
     scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));
     //scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
     //Add Planes
-    scene.planes.push(new plane(0,-1,0,0.1,1,0,[255,255,0],10,0.2));
+    scene.planes.push(new plane(0, -1, 0, 0.1, 1, 0, [255, 255, 0], 10, 0.2));
+    //Add Disks
+    scene.disks.push(new disk(0, -0.5, 1, 0.1, 1.2, 0, 1, [100, 255, 0], 500, 0.08));
     //Add lights
     scene.lights.push(new light(AMBIENT, 0.2));
     scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));

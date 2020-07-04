@@ -80,6 +80,13 @@ function closestIntersection(world, origin, direction, clipMax, clipMin) {
             closest_object = world.planes[i];
         }
     }
+    for (let i = 0; i < world.disks.length; i++) {
+        const t1 = IntersectRayDisk(origin, direction, world.disks[i]);
+        if (t1 < clipMax && t1 > clipMin && t1 < closest_t) {
+            closest_t = t1;
+            closest_object = world.disks[i];
+        }
+    }
     if (closest_object)
         return [closest_object, closest_t];
     else
