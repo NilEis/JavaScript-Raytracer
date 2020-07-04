@@ -4,6 +4,10 @@ class sphere extends obj{
         this.pos = new vector3D(x, y, z);
         this.r = r;
     }
+
+    getNormale(p){
+        return vector3D.sub(p, this.pos);
+    }
 }
 
 function IntersectRaySphere(origin, dir, sphere) {
