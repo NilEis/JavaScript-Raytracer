@@ -5,11 +5,15 @@ class plane extends obj {
         this.normal = new vector3D(nx, ny, nz);
         this.normal.normalize();
     }
-    getNormale(p){
+    getNormale(p) {
         return this.normal.get();
     }
 }
 
 function IntersectRayPlane(origin, dir, plane) {
-    return false;
+    const den = vector3D.scalarProduct(dir, plane.normal);
+    if (den == 0)
+        return null;
+    const num = vector3D.scalarProduct(vector3D.sub(plane.pos, origin), plane.normal);
+    return num / den;
 }
