@@ -14,16 +14,17 @@ async function render(world, point, distanceToPlane, sx, sy, ex, ey, width, heig
     const i = 1;
     for (let y = sy; y < ey; y++) {
         for (let x = sx; x < ex; x++) {
-            if (y % i == 0 && x % i == 0) {
+            if (y % y == 0 && x % i == 0) {
                 const vx = mapValue(x, 0, width, -aspectX, aspectX);
                 const vy = mapValue(y, 0, height, aspectY, -aspectY);
                 const ray = new vector3D(vx, vy, distanceToPlane);
                 ray.normalize();
                 const clr = colorToRGB(traceRay(world, point, ray, 1, Infinity, bounces));
                 //c.line(x,y,x+vx,y+vy,"white");
-                retArr.push(clr);
-            } else
-                retArr.push(colorToRGB([0, 0, 0]));
+                for (let j = 0; j < i; j++)
+                    retArr.push(clr);
+            } //else
+                //retArr.push(colorToRGB([0, 0, 0]));
 
         }
     }
@@ -69,6 +70,14 @@ function closestIntersection(world, origin, direction, clipMax, clipMin) {
         if (t2 < clipMax && t2 > clipMin && t2 < closest_t) {
             closest_t = t2;
             closest_object = world.spheres[i];
+        }
+        //closest_t = Math.max(t1,t2);
+    }
+    for (let i = 0; i < world.planes.length; i++) {
+        const t1 = IntersectRayPlane(origin, direction, world.planes[i]);
+        if (t1 < clipMax && t1 > clipMin && t1 < closest_t) {
+            closest_t = t1;
+            closest_object = world.planes[i];
         }
     }
     if (closest_object)

@@ -4,15 +4,15 @@
  */
 
 
-const WIDTH = 600;
-const HEIGHT = 400;
+const WIDTH = 500;
+const HEIGHT = 500;
 
 /**
  * @constant {canvasClass} c Die canvasClass
  */
 const c = new canvasClass("canvasID", "canvas", WIDTH, HEIGHT, "black");
 
-const POINT = new vector3D(0, -0.25, 0);
+const POINT = new vector3D(0, -0.25, -2);
 
 const PLANE = new vector3D(2.5, -0.25, 0);
 
@@ -43,12 +43,12 @@ function init() {
     };
     //Add Spheres
     scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.8, 1.3));
-    scene.spheres.push(new sphere(0, 0, -2, 1, [0, 255, 0], 500, 0.2));
+    scene.spheres.push(new sphere(-1, 0, -2, 1, [0, 255, 0], 500, 0.2));
     scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.2));
     scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));
-    scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
+    //scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
     //Add Planes
-    scene.planes.push(new plane(0,-1,0,0,1,0,[255,255,0]));
+    scene.planes.push(new plane(0,-1,0,0.1,1,0,[255,255,0],10,0.2));
     //Add lights
     scene.lights.push(new light(AMBIENT, 0.2));
     scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
@@ -66,7 +66,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(4, 4, bounces);
+    start(1, 1, bounces);
 }
 
 
