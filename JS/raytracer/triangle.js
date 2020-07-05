@@ -13,7 +13,7 @@ class triangle extends obj {
 //http://webserver2.tecgraf.puc-rio.br/~mgattass/cg/trbRR/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
 function IntersectRayTriangle(origin, dir, triangle) {
     dir.normalize();
-    const EPSILON = 0.0000001;
+    const EPSILON = 0.00000001;
     const vertex0 = triangle.A;
     const vertex1 = triangle.B;
     const vertex2 = triangle.C;

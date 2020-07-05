@@ -12,9 +12,9 @@ const HEIGHT = 500;
  */
 const c = new canvasClass("canvasID", "canvas", WIDTH, HEIGHT, "black");
 
-const POINT = new vector3D(0, 0, -2);
+const POINT = new vector3D(0, 0, -4);
 
-const PLANE = new vector3D(1.5, 0, -2);
+const PLANE = new vector3D(1.5, 0, -4);
 
 const FPS = 0;
 

@@ -20,6 +20,10 @@
     <button onclick="tick(25)">Mit 25 Reflexionen</button>
     <button onclick="tick(50)">Mit 50 Reflexionen</button>
     <button onclick="tick(100)">Mit 100 Reflexionen</button>
+    <br />
+    <label for="file">Choose a obj file:</label>
+
+    <input type="file" id="file" name="file" onchange="getAsText(document.getElementById('file').files[0])">
 </body>
 
 <!--Canvas-->
@@ -35,6 +39,7 @@
 
 <!--Raycaster-->
 <script src="JS/raytracer/engine.js"></script>
+<script src="JS/raytracer/fileLoader.js"></script>
 <script src="JS/raytracer/color.js"></script>
 <script src="JS/raytracer/Objekt.js"></script>
 <script src="JS/raytracer/sphere.js"></script>
