@@ -14,7 +14,7 @@ const c = new canvasClass("canvasID", "canvas", WIDTH, HEIGHT, "black");
 
 const POINT = new vector3D(0, 0, -2);
 
-const PLANE = new vector3D(2.5, 0, -2);
+const PLANE = new vector3D(1.5, 0, -2);
 
 const FPS = 0;
 
@@ -39,23 +39,32 @@ function init() {
         spheres: [],
         planes: [],
         disks: [],
+        triangles: [],
         lights: [],
         BACKGROUND_COLOR: [200, 200, 200]
     };
+
     //Add Spheres
-    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.8, 1.3));
+    /*scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.8, 1.3));
     scene.spheres.push(new sphere(-1, 0, -2, 1, [0, 255, 0], 500, 0.2));
     scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.2));
-    scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));
+    scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));*/
     //scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
+
     //Add Planes
-    scene.planes.push(new plane(0, -1, 0, 0.1, 1, 0, [255, 255, 0], 10, 0.2));
+    scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.1));
+
     //Add Disks
-    scene.disks.push(new disk(0, -0.5, 1, 0.1, 1.2, 0, 1, [100, 255, 0], 500, 0.08));
+    /*scene.disks.push(new disk(0, -0.5, 1, 0.1, 1.2, 0, 1, [100, 255, 0], 500, 0.08));*/
+
+    //Add Triangles
+    //scene.triangles.push(new triangle(-1, 0, 2, 0, 2, 1, 1, 0, 2, [0, 255, 255], 100, 0.6));
+
     //Add lights
     scene.lights.push(new light(AMBIENT, 0.2));
     scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
     scene.lights.push(new light("directional", 0.2, null, new vector3D(1, 4, 4)));
+
     if (FPS == 0)
         tick(1);
     else
