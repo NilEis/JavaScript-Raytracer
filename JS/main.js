@@ -78,7 +78,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(1, 1, bounces);
+    start(4, 4, bounces);
 }
 
 
