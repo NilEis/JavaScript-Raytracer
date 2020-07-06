@@ -22,20 +22,43 @@ function errorHandler(evt) {
 }
 
 function addTriangles(str) {
-    const line = str.split("\n");
-    for (let i = 0; i < line.length; i += 3) {
-        const A = line[i].split(" ");
-        const x1 = Number.parseFloat(A[1]);
-        const y1 = Number.parseFloat(A[2]);
-        const z1 = Number.parseFloat(A[3]);
-        const B = line[i + 1].split(" ");
-        const x2 = Number.parseFloat(B[1]);
-        const y2 = Number.parseFloat(B[2]);
-        const z2 = Number.parseFloat(B[3]);
-        const C = line[i + 2].split(" ");
-        const x3 = Number.parseFloat(C[1]);
-        const y3 = Number.parseFloat(C[2]);
-        const z3 = Number.parseFloat(C[3]);
-        scene.triangles.push(new triangle(x1, y1, z1, x2, y2, z2, x3, y3, z3, [0, 255, 255], 100, 0.6));
+    const lines = str.split("\n");
+    const normals = [];
+    const vertices = [];
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].split(" ");
+        switch (line[0]) {
+            case '#':
+                //Kommentar
+                break;
+            case 's':
+                //Keine Ahnung was das ist
+                break;
+            case 'o':
+                //Name des Objekts
+                break;
+            case 'v':
+                vertices.push(new vector3D(Number.parseFloat(line[1]), Number.parseFloat(line[2]), Number.parseFloat(line[3])));
+                break;
+            case 'vn':
+                normals.push(new vector3D(Number.parseFloat(line[1]), Number.parseFloat(line[2]), Number.parseFloat(line[3])));
+                break;
+            case 'f':
+                let tmp = line[1].split('//');
+                console.log(vertices);
+                console.log(normals);
+                console.log(line);
+                console.log(tmp);
+                const v1 = vertices[Number.parseInt(tmp[0]) - 1].get();
+                tmp = line[2].split('//');
+                console.log(tmp);
+                const v2 = vertices[Number.parseInt(tmp[0]) - 1].get();
+                tmp = line[3].split('//');
+                console.log(tmp);
+                const v3 = vertices[Number.parseInt(tmp[0]) - 1].get();
+                const vn = normals[Number.parseInt(tmp[1]) - 1].get();;
+                scene.triangles.push(triangle.fromVec3D(v1, v2, v3, vn, [0, 255, 255], 100, 0.6));
+                break;
+        }
     }
 }
