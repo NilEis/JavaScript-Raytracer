@@ -9,9 +9,9 @@
  * @param {number} ey Der Endpunkt des Rechtecks
  * @return {color[]} Die Farbwerte für jeden Pixel
  */
-async function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height, aspectX, aspectY, bounces) {
+async function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height, aspectX, aspectY, bounces, pixelate = 1) {
     let retArr = [];
-    const i = 1;
+    const i = pixelate;
     for (let y = sy; y < ey; y++) {
         for (let x = sx; x < ex; x++) {
             if (y % y == 0 && x % i == 0) {

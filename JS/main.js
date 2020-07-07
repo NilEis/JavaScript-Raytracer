@@ -45,14 +45,14 @@ function init() {
     };
 
     //Add Spheres
-    /*scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.8, 1.3));
-    scene.spheres.push(new sphere(-1, 0, -2, 1, [0, 255, 0], 500, 0.2));
+    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.8, 1.3));
+    /*scene.spheres.push(new sphere(-1, 0, -2, 1, [0, 255, 0], 500, 0.2));
     scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.2));
     scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));*/
     //scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
 
     //Add Planes
-    scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.1));
+    scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.5));
 
     //Add Disks
     /*scene.disks.push(new disk(0, -0.5, 1, 0.1, 1.2, 0, 1, [100, 255, 0], 500, 0.08));*/
@@ -78,17 +78,20 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(4, 4, bounces);
+    start(1, 50, bounces);
 }
 
 
 function start(tileX, tileY, bounces) {
+    if (WIDTH % tileX != 0 || HEIGHT % tileY != 0)
+        alert("!!!WIDTH%tileX != 0 || HEIGHT % tileY != 0!!!");
     const tw = WIDTH / tileX;
     const th = HEIGHT / tileY;
     const dToP = vector3D.sub(PLANE, POINT).mag;
+    const pixelate = document.getElementById("pixelate") == null ? 1 : document.getElementById("pixelate").value;
     for (let y = 0; y < tileY; y++)
         for (let x = 0; x < tileX; x++)
-            setTimeout(processTile, 0, dToP, x, tw, y, th, bounces);
+            setTimeout(processTile, 0, dToP, x, tw, y, th, bounces, pixelate);
 }
 
 /*webW.addEventListener('message', function(e) {
@@ -97,8 +100,8 @@ function start(tileX, tileY, bounces) {
 */
 init();
 
-function processTile(dToP, x, tw, y, th, bounces) {
-    render(scene, POINT, dToP, x * tw, y * th, x * tw + tw, y * th + th, WIDTH, HEIGHT, WIDTH / HEIGHT, 1, bounces).then((result) => {
+function processTile(dToP, x, tw, y, th, bounces, pixelate = 1) {
+    render(scene, POINT, dToP, x * tw, y * th, x * tw + tw, y * th + th, WIDTH, HEIGHT, WIDTH / HEIGHT, 1, bounces, pixelate).then((result) => {
         c.render(result, x * tw, y * th, x * tw + tw, y * th + th, 1, 1);
         console.log((WIDTH * HEIGHT) + ":" + result.length);
     }).catch((err) => {
