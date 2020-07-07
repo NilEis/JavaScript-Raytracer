@@ -53,6 +53,7 @@ function init() {
 
     //Add Planes
     scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.5));
+    scene.planes.push(new plane(0, 50, 0, 0, 1, 0, [0, 0, 250], 100, 0.1));
 
     //Add Disks
     /*scene.disks.push(new disk(0, -0.5, 1, 0.1, 1.2, 0, 1, [100, 255, 0], 500, 0.08));*/
@@ -62,8 +63,8 @@ function init() {
 
     //Add lights
     scene.lights.push(new light(AMBIENT, 0.2));
-    scene.lights.push(new light(POINTLIGHT, 0.6, new vector3D(2, 3, 0)));
-    scene.lights.push(new light("directional", 0.2, null, new vector3D(1, 4, 4)));
+    scene.lights.push(new light(POINTLIGHT, 0.4, new vector3D(2, 3, 0)));
+    scene.lights.push(new light("directional", 0.4, null, new vector3D(1, 4, 4)));
 
     if (FPS == 0)
         tick(1);
