@@ -76,24 +76,110 @@
  * @param {number} ey Der Endpunkt des Rechtecks
  * @return {color[]} Die Farbwerte für jeden Pixel
  */
-function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height) {
+async function render(world, point, distanceToPlane, sx, sy, ex, ey, width, height, aspectX, aspectY, bounces, pixelate = 1) {
     let retArr = [];
+    const i = pixelate;
     for (let y = sy; y &lt; ey; y++) {
         for (let x = sx; x &lt; ex; x++) {
-            const vx = mapValue(x, 0, width, -1, 1);
-            const vy = mapValue(y, 0, height, 1, -1);
-            const ray = new vector3D(vx,vy,1);
-            ray.normalize();
-            const clr = normalToRGB(ray);
-            retArr.push(clr);
+            if (y % y == 0 &amp;&amp; x % i == 0) {
+                const vx = mapValue(x, 0, width, -aspectX, aspectX);
+                const vy = mapValue(y, 0, height, aspectY, -aspectY);
+                const ray = new vector3D(vx, vy, distanceToPlane);
+                ray.normalize();
+                const clr = colorToRGB(traceRay(world, point, ray, 1, Infinity, bounces));
+                //c.line(x,y,x+vx,y+vy,"white");
+                for (let j = 0; j &lt; i; j++)
+                    retArr.push(clr);
+            } //else
+            //retArr.push(colorToRGB([0, 0, 0]));
+
         }
     }
     return retArr;
 }
 
 
-function traceRay(world,origin,direction, clipMin, clipMax){
+function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
+    const retV = closestIntersection(world, origin, direction, clipMax, clipMin);
+    if (!retV)
+        return world.BACKGROUND_COLOR;
+    let closest_obj = retV[0];
+    let closest_t = retV[1];
+    let p = vector3D.add(origin, vector3D.mul(direction, closest_t));
+    let normale = closest_obj.getNormale(p);
+    normale.normalize();
+    const r = closest_obj.reflective;
+    const t = closest_obj.transparency;
+    const local_color = mulRGB(mulRGB(closest_obj.getColor(p), ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_obj.specular)), 1 + closest_obj.emission);
+    if (rekAnker &lt;= 0 || (r &lt;= 0 &amp;&amp; t &lt;= 0))
+        return local_color;
+    const rRay = reflectRay(vector3D.mul(direction, -1), normale);
+    const reflected_color = r &lt;= 0 ? [0, 0, 0] : traceRay(world, p, rRay, 0.001, Infinity, rekAnker - 1);
+    const blended_color = addRGB(mulRGB(local_color, (1 - r)), mulRGB(reflected_color, r));
+    const tRay = refractRay(vector3D.mul(direction, -1), normale, 1, closest_obj.IOR);
+    if (tRay)
+        return blended_color;
+    const transparent_color = t &lt;= 0 ? [0, 0, 0] : traceRay(world, p, tRay, Infinity, 0.001, rekAnker - 1);
+    return addRGB(mulRGB(blended_color, (1 - t)), mulRGB(transparent_color, t));
+}
 
+function closestIntersection(world, origin, direction, clipMax, clipMin) {
+    let closest_t = Infinity;
+    let closest_object = null;
+    for (let i = 0; i &lt; world.spheres.length; i++) {
+        let t12 = IntersectRaySphere(origin, direction, world.spheres[i]);
+        const t1 = t12[0];
+        const t2 = t12[1];
+        if (t1 &lt; clipMax &amp;&amp; t1 > clipMin &amp;&amp; t1 &lt; closest_t) {
+            closest_t = t1;
+            closest_object = world.spheres[i];
+        }
+        if (t2 &lt; clipMax &amp;&amp; t2 > clipMin &amp;&amp; t2 &lt; closest_t) {
+            closest_t = t2;
+            closest_object = world.spheres[i];
+        }
+        //closest_t = Math.max(t1,t2);
+    }
+    for (let i = 0; i &lt; world.planes.length; i++) {
+        const t1 = IntersectRayPlane(origin, direction, world.planes[i]);
+        if (t1 &lt; clipMax &amp;&amp; t1 > clipMin &amp;&amp; t1 &lt; closest_t) {
+            closest_t = t1;
+            closest_object = world.planes[i];
+        }
+    }
+    for (let i = 0; i &lt; world.disks.length; i++) {
+        const t1 = IntersectRayDisk(origin, direction, world.disks[i]);
+        if (t1 &lt; clipMax &amp;&amp; t1 > clipMin &amp;&amp; t1 &lt; closest_t) {
+            closest_t = t1;
+            closest_object = world.disks[i];
+        }
+    }
+    for (let i = 0; i &lt; world.triangles.length; i++) {
+        const t1 = IntersectRayTriangle(origin, direction, world.triangles[i]);
+        if (t1 &lt; clipMax &amp;&amp; t1 > clipMin &amp;&amp; t1 &lt; closest_t) {
+            closest_t = t1;
+            closest_object = world.triangles[i];
+        }
+    }
+    if (closest_object)
+        return [closest_object, closest_t];
+    else
+        return false;
+}
+
+function reflectRay(ray, normal) {
+    return vector3D.sub(vector3D.mul(normal, 2 * vector3D.scalarProduct(normal, ray)), ray);
+}
+
+function refractRay(ray, normal, n1, n2) {
+    const einfallsvektor = ray.get();
+    einfallsvektor.normalize();
+    const n = n1 / n2;
+    const cosI = -vector3D.scalarProduct(normal, ray);
+    const sinT2 = n * n * (1.0 - cosI * cosI);
+    if (sinT2 > 1.0) return false;
+    const cosT = Math.sqrt(1.0 - sinT2);
+    return vector3D.add(vector3D.mul(einfallsvektor, n), vector3D.mul(normal, (n * cosI - cosT)));
 }</code></pre>
         </article>
     </section>
@@ -109,7 +195,7 @@ function traceRay(world,origin,direction, clipMin, clipMax){
 
 <footer class="footer">
     <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 14:51:07 GMT+0200 (Mitteleuropäische Sommerzeit)</p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 08 2020 14:45:42 GMT+0200 (Mitteleuropäische Sommerzeit)</p>
         <p class="sidebar-created-by">
             <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
             <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
