@@ -45,7 +45,7 @@ function init() {
     };
 
     //Add Spheres
-    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.8, 1.3));
+    scene.spheres.push(new sphere(0.5, 0, 2, 1, [255, 0, 0], 500, 0.5, 0.0, 1.3));
     /*scene.spheres.push(new sphere(-1, 0, -2, 1, [0, 255, 0], 500, 0.2));
     scene.spheres.push(new sphere(2, 0, 4, 1, [0, 0, 255], 500, 0.2));
     scene.spheres.push(new sphere(-2, 0, 4, 1, [0, 255, 0], 500, 0.4));*/
@@ -54,6 +54,7 @@ function init() {
     //Add Planes
     scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.3));
     scene.planes.push(new plane(0, 50, 0, 0, 1, 0, [0, 0, 250], 100, 0.1));
+    scene.planes.push(new plane(0, 0, -5, 0, 0, 1, [0, 0, 250], 100, 0.1));
     
     //Add Disks
     scene.disks.push(new disk(0, 0, 20, 0, 0, -1, 10, [0, 255, 0], 100, 0.4));
