@@ -8,6 +8,14 @@ class plane extends obj {
     getNormale(p) {
         return this.normal.get();
     }
+
+    getColor(p) {
+        const cValue = mapValue(Math.cos(p.x), -1, 1, 0, 1);
+        //const cValueX = mapValue(Math.cos(p.x), -1, 1, 0, 255);
+        //const cValueY = mapValue(Math.sin(p.y), -1, 1, 0, 255);
+        //const _color_ = [cValueY, cValueX, 255];
+        return mulRGB(this.color,cValue);
+    }
 }
 
 function IntersectRayPlane(origin, dir, plane) {

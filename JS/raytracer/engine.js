@@ -24,7 +24,7 @@ async function render(world, point, distanceToPlane, sx, sy, ex, ey, width, heig
                 for (let j = 0; j < i; j++)
                     retArr.push(clr);
             } //else
-                //retArr.push(colorToRGB([0, 0, 0]));
+            //retArr.push(colorToRGB([0, 0, 0]));
 
         }
     }
@@ -43,7 +43,7 @@ function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
     normale.normalize();
     const r = closest_obj.reflective;
     const t = closest_obj.transparency;
-    const local_color = mulRGB(mulRGB(closest_obj.color, ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_obj.specular)), 1 + closest_obj.emission);
+    const local_color = mulRGB(mulRGB(closest_obj.getColor(p), ComputeLighting(world, p.get(), normale.get(), vector3D.mul(direction, -1), closest_obj.specular)), 1 + closest_obj.emission);
     if (rekAnker <= 0 || (r <= 0 && t <= 0))
         return local_color;
     const rRay = reflectRay(vector3D.mul(direction, -1), normale);
@@ -52,7 +52,7 @@ function traceRay(world, origin, direction, clipMin, clipMax, rekAnker) {
     const tRay = refractRay(vector3D.mul(direction, -1), normale, 1, closest_obj.IOR);
     if (tRay)
         return blended_color;
-    const transparent_color = t <= 0 ? [0, 0, 0] : traceRay(world, p, tRay, 0.001, Infinity, rekAnker - 1);
+    const transparent_color = t <= 0 ? [0, 0, 0] : traceRay(world, p, tRay, Infinity, 0.001, rekAnker - 1);
     return addRGB(mulRGB(blended_color, (1 - t)), mulRGB(transparent_color, t));
 }
 

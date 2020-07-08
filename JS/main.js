@@ -52,10 +52,11 @@ function init() {
     //scene.spheres.push(new sphere(0, -5001, 0, 5000, [255, 255, 0], 10, 0.5));
 
     //Add Planes
-    scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.5));
+    scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.3));
     scene.planes.push(new plane(0, 50, 0, 0, 1, 0, [0, 0, 250], 100, 0.1));
-
+    
     //Add Disks
+    scene.disks.push(new disk(0, 0, 20, 0, 0, -1, 10, [0, 255, 0], 100, 0.4));
     /*scene.disks.push(new disk(0, -0.5, 1, 0.1, 1.2, 0, 1, [100, 255, 0], 500, 0.08));*/
 
     //Add Triangles
