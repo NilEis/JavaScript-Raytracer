@@ -30,5 +30,6 @@ onmessage = async (evt) => {
     const point = new vector3D(param[1].x, param[1].y, param[1].z);
     const result = await render(param[0], point, param[2], param[3], param[4], param[5], param[6], param[7], param[8], param[9], param[10], param[11], param[12]);
     self.postMessage([result, param[13].x, param[13].y, param[13].tw, param[13].th]);
+    console.clear();
     self.close();
 };
