@@ -10,12 +10,17 @@ class disk extends obj {
         return this.normal.get();
     }
 
-    getColor(p){
+    getColor(p) {
         const cValue = mapValue(Math.cos(p.x), -1, 1, 0, 1);
         //const cValueX = mapValue(Math.cos(p.x), -1, 1, 0, 255);
         //const cValueY = mapValue(Math.sin(p.y), -1, 1, 0, 255);
         //const _color_ = [cValueY, cValueX, 255];
-        return mulRGB(this.color,cValue);
+        return mulRGB(this.color, cValue);
+    }
+
+    static from(json) {
+        //return Object.assign(new disk(), json);
+        return new disk(json.pos.x, json.pos.y, json.pos.z, json.normal.x, json.normal.y, json.normal.z, json.r, json.color, json.specular, json.reflective, json.transparency, json.IOR, json.emission);
     }
 }
 
@@ -26,7 +31,7 @@ function IntersectRayDisk(origin, dir, disk) {
     const num = vector3D.scalarProduct(vector3D.sub(disk.pos, origin), disk.normal);
     const t = num / den;
     const pointOfIntersection = vector3D.add(origin, vector3D.mul(dir, t));
-    const PD = vector3D.sub(pointOfIntersection,disk.pos);
+    const PD = vector3D.sub(pointOfIntersection, disk.pos);
     if (PD.mag <= disk.r)
         return t;
     else

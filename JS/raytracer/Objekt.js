@@ -7,4 +7,8 @@ class obj{
         this.IOR = IndexOfRefrection;
         this.emission = emission;
     }
+
+    fromData(object) {
+        Object.assign(this, object);
+      }
 }

@@ -5,6 +5,10 @@ class light {
         this.pos = pos;
         this.dir = dir;
     }
+    static from(json) {
+        //console.log(json);
+        return new light(json.type, json.intens, json.pos != null ? new vector3D(json.pos.x, json.pos.y, json.pos.z) : null, json.dir != null ? new vector3D(json.dir.x, json.dir.y, json.dir.z) : null);
+    }
 }
 
 const AMBIENT = 0xABEFF;

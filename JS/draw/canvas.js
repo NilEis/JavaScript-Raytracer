@@ -270,7 +270,12 @@ class canvasClass {
         const breite = ex - sx;
         for (let y = sy; y < ey; y++) {
             for (let x = sx; x < ex; x++) {
-                this.fillRect(x, y, tw, th, arr[(y-sy) * breite + (x-sx)]);
+                try{
+                this.fillRect(x, y, tw, th, colorToRGB(arr[(y-sy) * breite + (x-sx)]));
+                }
+                catch(e){
+                    console.log(arr[(y-sy) * breite + (x-sx)]);
+                }
             }
         }
     }

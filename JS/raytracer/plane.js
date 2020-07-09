@@ -16,6 +16,11 @@ class plane extends obj {
         //const _color_ = [cValueY, cValueX, 255];
         return mulRGB(this.color,cValue);
     }
+
+    static from(json){
+        //return Object.assign(new plane(), json);
+        return new plane(json.pos.x,json.pos.y,json.pos.z,json.normal.x,json.normal.y,json.normal.z,json.color,json.specular,json.reflective,json.transparency,json.IOR, json.emission);
+      }
 }
 
 function IntersectRayPlane(origin, dir, plane) {

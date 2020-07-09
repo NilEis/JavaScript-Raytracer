@@ -1,16 +1,21 @@
-class sphere extends obj{
+class sphere extends obj {
     constructor(x, y, z, r, color, specular = 0.0, reflective = 0.0, transparency = 0.0, IndexOfRefrection = 1.0, emission = 0.0) {
         super(color, specular, reflective, transparency, IndexOfRefrection, emission);
         this.pos = new vector3D(x, y, z);
         this.r = r;
     }
 
-    getNormale(p){
+    getNormale(p) {
         return vector3D.sub(p, this.pos);
     }
-    
-    getColor(p){
+
+    getColor(p) {
         return this.color;
+    }
+
+    static from(json) {
+        //return Object.assign(new sphere(), json);
+        return new sphere(json.pos.x, json.pos.y, json.pos.z, json.r, json.color, json.specular, json.reflective, json.transparency, json.IOR, json.emission);
     }
 }
 

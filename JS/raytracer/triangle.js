@@ -10,12 +10,17 @@ class triangle extends obj {
         return this.normal.get();
     }
 
-    getColor(p){
+    getColor(p) {
         return this.color;
     }
 
     static fromVec3D(v1, v2, v3, n, color, specular = 0.0, reflective = 0.0, transparency = 0.0, IndexOfRefrection = 1.0, emission = 0.0) {
         return new triangle(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, v3.x, v3.y, v3.z, n.x, n.y, n.z, color, specular, reflective, transparency, IndexOfRefrection, emission);
+    }
+
+    static from(json) {
+        //return Object.assign(new triangle(), json);
+        return new triangle(json.A.x, json.A.y, json.A.z, json.B.x, json.B.y, json.B.z, json.C.x, json.C.y, json.C.z, json.normal.x, json.normal.y, json.normal.z, json.color, json.specular, json.reflective, json.transparency, json.IOR, json.emission);
     }
 }
 

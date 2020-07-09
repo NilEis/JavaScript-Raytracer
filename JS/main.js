@@ -20,6 +20,8 @@ const FPS = 0;
 
 var scene;
 
+var ArrWorker = [];
+
 //const webW = new Worker("JS/engine.js");
 
 //Leere die Konsole um einen besseren Überblick in dieser zu bekommen
@@ -55,7 +57,7 @@ function init() {
     scene.planes.push(new plane(0, -1, 0, 0, 1, 0, [255, 255, 0], 100, 0.3));
     scene.planes.push(new plane(0, 50, 0, 0, 1, 0, [0, 0, 250], 100, 0.1));
     scene.planes.push(new plane(0, 0, -5, 0, 0, 1, [0, 0, 250], 100, 0.1));
-    
+
     //Add Disks
     scene.disks.push(new disk(0, 0, 20, 0, 0, -1, 10, [0, 255, 0], 100, 0.4));
     /*scene.disks.push(new disk(0, -0.5, 1, 0.1, 1.2, 0, 1, [100, 255, 0], 500, 0.08));*/
@@ -81,11 +83,11 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(1, 50, bounces);
+    start(5, 5, bounces);
 }
 
 
-function start(tileX, tileY, bounces) {
+/*function start(tileX, tileY, bounces) {
     if (WIDTH % tileX != 0 || HEIGHT % tileY != 0)
         alert("!!!WIDTH%tileX != 0 || HEIGHT % tileY != 0!!!");
     const tw = WIDTH / tileX;
@@ -95,6 +97,43 @@ function start(tileX, tileY, bounces) {
     for (let y = 0; y < tileY; y++)
         for (let x = 0; x < tileX; x++)
             setTimeout(processTile, 0, dToP, x, tw, y, th, bounces, pixelate);
+}*/
+
+function start(tileX, tileY, bounces) {
+    if (WIDTH % tileX != 0 || HEIGHT % tileY != 0)
+        alert("!!!WIDTH%tileX != 0 || HEIGHT % tileY != 0!!!");
+    const tw = WIDTH / tileX;
+    const th = HEIGHT / tileY;
+    const dToP = vector3D.sub(PLANE, POINT).mag;
+    const pixelate = document.getElementById("pixelate") == null ? 1 : document.getElementById("pixelate").value;
+    ArrWorker = new Array(tileX, tileY);
+    for (let y = 0; y < tileY; y++)
+        for (let x = 0; x < tileX; x++) {
+            ArrWorker[y * tileX + x] = new Worker("JS/worker.js");
+            ArrWorker[y * tileX + x].onmessage = (evt) => {
+                const param = evt.data;
+                drawTile(param[0], param[1], param[2], param[3], param[4]);
+            };
+            ArrWorker[y * tileX + x].postMessage([
+                scene,
+                {
+                    x: POINT.x,
+                    y: POINT.y,
+                    z: POINT.z
+                },
+                dToP,
+                x * tw, y * th,
+                x * tw + tw, y * th + th,
+                WIDTH, HEIGHT, WIDTH / HEIGHT,
+                1, bounces, pixelate,
+                {
+                    x: x,
+                    y: y,
+                    tw: tw,
+                    th: th
+                }
+            ]);
+        }
 }
 
 /*webW.addEventListener('message', function(e) {
@@ -110,4 +149,8 @@ function processTile(dToP, x, tw, y, th, bounces, pixelate = 1) {
     }).catch((err) => {
         alert(err);
     });
+}
+
+function drawTile(result, x, y, tw, th) {
+    c.render(result, x * tw, y * th, x * tw + tw, y * th + th, 1, 1);
 }

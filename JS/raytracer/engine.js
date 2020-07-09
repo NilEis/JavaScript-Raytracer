@@ -19,7 +19,7 @@ async function render(world, point, distanceToPlane, sx, sy, ex, ey, width, heig
                 const vy = mapValue(y, 0, height, aspectY, -aspectY);
                 const ray = new vector3D(vx, vy, distanceToPlane);
                 ray.normalize();
-                const clr = colorToRGB(traceRay(world, point, ray, 1, Infinity, bounces));
+                const clr = traceRay(world, point, ray, 1, Infinity, bounces);
                 //c.line(x,y,x+vx,y+vy,"white");
                 for (let j = 0; j < i; j++)
                     retArr.push(clr);
