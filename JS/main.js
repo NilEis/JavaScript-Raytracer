@@ -83,7 +83,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(5, 5, bounces);
+    start(2, 2, bounces);
 }
 
 
