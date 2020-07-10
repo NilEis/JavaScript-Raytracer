@@ -22,7 +22,14 @@ var scene;
 
 var ArrWorker = [];
 
-//const webW = new Worker("JS/engine.js");
+/**
+* @event onmousemove
+* @function updateMouse
+EventListener on body
+*/
+document.getElementById("main").addEventListener("mousemove", function (event) {
+    updateMouse(event);
+});
 
 //Leere die Konsole um einen besseren Überblick in dieser zu bekommen
 //console.clear();
@@ -83,7 +90,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(2, 2, bounces);
+    start(4, 4, bounces);
 }
 
 
