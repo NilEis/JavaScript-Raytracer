@@ -31,6 +31,16 @@ var scene;
 var tickIntervall;
 
 /**
+* @event onmousemove
+* @function updateMouse
+* EventListener on body
+*/
+document.getElementById("main").addEventListener("mousemove", function (event) {
+    updateMouse(event);
+});
+
+
+/**
  * Setzt alles in den Startzustand
  */
 function init() {
