@@ -89,7 +89,7 @@ function init() {
  */
 function tick(bounces) {
     c.cls();
-    start(4, 4, bounces);
+    start(4,4, bounces);
 }
 
 
@@ -111,7 +111,7 @@ function start(tileX, tileY, bounces) {
     const tw = WIDTH / tileX;
     const th = HEIGHT / tileY;
     const dToP = vector3D.sub(PLANE, POINT).mag;
-    const pixelate = document.getElementById("pixelate") == null ? 1 : document.getElementById("pixelate").value;
+    const pixelate = 1;
     ArrWorker = new Array(tileX, tileY);
     for (let y = 0; y < tileY; y++)
         for (let x = 0; x < tileX; x++) {
